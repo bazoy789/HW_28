@@ -18,20 +18,7 @@ class AdListView(ListView):
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
 
-        """
-        Помогите разобраться!!! 
-        на моем компьютере при запросе по на данную view все отображается и работают url на картинки
-        но когда я раскомментирую строчку ниже у меня запрос падает в ошибку
-        
-        raise ValueError(
-        ValueError: The 'image' attribute has no file associated with it.
-        [30/Mar/2023 21:45:53] "GET /ad/ HTTP/1.1" 500 84331
-        
-        что это может быть??? я сломал голову
-        
-        заранее спасибо за ответ
-        """
-        # self.object_list = self.object_list.order_by("-price")
+        self.object_list = self.object_list.order_by("-price")
 
         paginator = Paginator(self.object_list, 10)
         page_number = request.GET.get("page")
@@ -50,7 +37,7 @@ class AdListView(ListView):
                     "description": ad.description,
                     "is_published": ad.is_published,
                     "category": ad.category_id.name,
-                    "image": ad.image.url
+                    "image": ad.image.url if ad.image else None
                 }
             )
 
